@@ -1,0 +1,10 @@
+import cv2
+import time
+import numpy as np
+cap = cv2.VideoCapture(0)
+while True:
+    sucess,img = cap.read()
+    cv2.imshow('Web Cam', img)
+    if cv2.waitKey(1) == ord('s'):
+        time_s = time.strftime('%Y-%m-%d-%H-%M-%S')
+        cv2.imwrite(f'{time_s}.jpg', img)

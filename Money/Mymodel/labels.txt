@@ -1,0 +1,2 @@
+0 NEW 10 Taka
+1 OLD 10 Taka

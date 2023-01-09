@@ -1,0 +1,15 @@
+import cv2
+import time
+import numpy as np
+import pyautogui
+import mediapipe as mp
+cap = cv2.VideoCapture(0)
+while True:
+    _,frame = cap.read()
+    frame = cv2.flip(frame,1)
+    #rgb_frame = cv2.cvtColor(frame,cv2.COLOR_BGR2RGB)
+    #gray = cv2.cvtColor(frame, cv2.COLOR_RGB2GRAY)
+    #Gaussian = cv2.GaussianBlur(frame, (7, 7), 0)
+
+    cv2.imshow("img",frame)
+    cv2.waitKey(1)
