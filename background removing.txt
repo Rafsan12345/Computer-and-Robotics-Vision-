@@ -1,0 +1,11 @@
+import cv2
+import time
+import numpy as np
+from cvzone.SelfiSegmentationModule import SelfiSegmentation
+cap = cv2.VideoCapture(0)
+segmentor = SelfiSegmentation()
+while True:
+    sucess,img = cap.read()
+    imgout = segmentor.removeBG(img,(255,0,0),threshold=0.5)
+    cv2.imshow("img",imgout)
+    cv2.waitKey(1)
