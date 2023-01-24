@@ -1,0 +1,84 @@
+import cv2
+import time
+import numpy as np
+import pickle
+import urllib
+w , h = 60,60
+poslist = []
+try:
+    with open('car', 'rb') as f:
+        poslist = pickle.load(f)
+except:
+    poslist = []
+
+wcam , hcam = 648,488
+url = 'http://192.168.0.100:8080/video'
+cap = cv2.VideoCapture(url)
+cap.set(3, wcam)
+cap.set(4, hcam)
+def cr(imgr):
+    space = 0
+    for pos in poslist:
+        x, y = pos
+        cv2.rectangle(img, pos, (pos[0] + w, pos[1] + h), (0, 255, 0), 3)
+        cropped_image = imgr[y:y + 100, x:x + 100]
+        cv2.imshow(str(x*y), cropped_image)
+        ccc = cv2.countNonZero(cropped_image)
+        font = cv2.FONT_HERSHEY_SIMPLEX
+
+        if ccc > 700:
+             cv2.circle(img, (x, y), 10, (0, 0, 255), -1)
+             cv2.putText(img, f'{ccc}', (x,y + 100 - 10), font, 1, (0, 0, 255), 2, cv2.LINE_AA)
+             #space += 1
+
+        else:
+            cv2.circle(img, (x, y), 10, (255, 0, 255), -1)
+            cv2.putText(img, f'{ccc}', (x, y + 100 - 10), font, 1, (255, 255, 255), 2, cv2.LINE_AA)
+            space += 1
+    font = cv2.FONT_HERSHEY_SIMPLEX
+    cv2.putText(img, f'Touch free space: {space}', (65, 20 + 100 - 10), font, 2, (0, 0, 255), 2, cv2.LINE_AA)
+
+
+def mousePoints(event,x,y,flags,params):
+    if event == cv2.EVENT_LBUTTONDOWN:
+        poslist.append((x,y))
+        print(poslist)
+
+    if event == cv2.EVENT_RBUTTONDOWN:
+        print('click')
+        for i,pos in enumerate(poslist):
+            x1,y1 = pos
+            if x1 < x < x1 + w and y1 < y < y1 + h:
+                poslist.pop(i)
+
+    with open('car','wb') as f:
+        pickle.dump(poslist,f)
+
+
+
+
+
+
+
+while True:
+    sucess, img = cap.read()
+    #img = cv2.imread('zz.jpg')
+    img = cv2.resize(img, (748,588))
+    #print(imCropResize)
+    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    # Apply Gaussian blur to the frame
+    blur = cv2.GaussianBlur(gray, (5, 5), 0)
+    # Apply Canny edge detection to the blurred frame
+    edges = cv2.Canny(blur, 50, 50)
+    kernel = np.ones((3, 3), np.uint8)
+    imgd = cv2.dilate(edges, kernel, iterations=1)
+    imgr = cv2.morphologyEx(imgd, cv2.MORPH_CLOSE, kernel)
+    cr(imgr)
+    ###################
+    cv2.imshow("img", img)
+
+    #cv2.imshow("img2", edges)
+    cv2.setMouseCallback("img", mousePoints)
+
+
+    cv2.waitKey(1)

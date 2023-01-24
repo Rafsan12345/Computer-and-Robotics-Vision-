@@ -1,0 +1,61 @@
+import cv2
+import time
+import numpy as np
+import os
+# wcam , hcam = 648,488
+cap = cv2.VideoCapture(0)
+# cap.set(3,wcam)
+# cap.set(4,hcam)
+poslist = []
+folderPath = 'image'
+mylist = os.listdir(folderPath)
+newlist = []
+for impath in mylist:
+    image = cv2.imread(f"{folderPath}/{impath}")
+    image = cv2.resize(image, (300, 300),interpolation=cv2.INTER_LINEAR)
+    newlist.append(image)
+
+def mousePoints(event,x,y,flags,params):
+    if event == cv2.EVENT_LBUTTONDOWN:
+        poslist.append((x,y))
+        print(poslist)
+
+
+while True:
+    sucess, img = cap.read()
+    #cv2.line(img, (4, 81), (512, 42), (0, 255, 0), 9)
+    cv2.rectangle(img, (481, 139), (481+100,129+100), (0, 255, 0), cv2.FILLED)
+    #cv2.rectangle(img, (485, 361), (485 + 100, 361 + 100), (0, 255, 0), cv2.FILLED)
+    #cv2.circle(image, center_coordinates, radius, color, thickness)
+    #cv2.circle(img, (312, 244), 5, (0, 0, 255), thickness=2)
+    #cv2.circle(img, (385, 243), 5, (0, 0, 255), thickness=2)
+    ###################
+    #cv2.line(img, (482, 140), (300, 134), (0, 255, 0), 9)
+    #cv2.line(img, (479, 228), (300, 224), (0, 0, 0), 9)
+    cv2.line(img, (479, 185), (299, 185), (0, 0, 255), 15)
+    cv2.line(img, (529, 230), (529, 360), (0, 0, 255), 15)
+    cv2.line(img, (587, 414), (638, 414), (0, 0, 255), 15)
+    font = cv2.FONT_HERSHEY_SIMPLEX
+    cv2.putText(img,'ON', (313, 30), font, 1, (0, 255, 0), 2, cv2.LINE_AA)
+    cv2.putText(img,'OFF', (441, 30), font, 1, (0, 0, 255), 2, cv2.LINE_AA)
+    cv2.putText(img, 'Transformer1', (421, 124), font, 1, (255, 0, 255), 2, cv2.LINE_AA)
+    cv2.putText(img, 'Grid1', (560, 358), font, 1, (255, 0, 255), 2, cv2.LINE_AA)
+    ##
+    cv2.putText(img, 'Volt: 220', (41, 384), font, 1, (0, 0, 255), 2, cv2.LINE_AA)
+    cv2.putText(img, 'Frq: 50 HZ',(47, 430), font, 1, (0, 0, 255), 2, cv2.LINE_AA)
+    cv2.putText(img, 'I: 20A', (281, 374), font, 1, (0, 0, 255), 2, cv2.LINE_AA)
+    cv2.putText(img, 'P: 20MW', (282, 442), font, 1, (0, 0, 255), 2, cv2.LINE_AA)
+    ##
+    cv2.putText(img, 'L1', (351, 221), font, 1, (0, 255, 255), 2, cv2.LINE_AA)
+    cv2.putText(img, 'L2', (545, 268), font, 1, (0, 255, 255), 2, cv2.LINE_AA)
+    cv2.putText(img, 'L3', (602, 450), font, 1, (0, 255, 255), 2, cv2.LINE_AA)
+
+    ##
+    #cv2.circle(img, (529, 184), 50, (0, 255, 255), -1)
+    cv2.circle(img, (529, 411), 50, (0, 255, 0), -1)
+    img[0:300, 0:300] = newlist[0]
+
+
+    cv2.imshow("img", img)
+    cv2.setMouseCallback("img", mousePoints)
+    cv2.waitKey(1)
