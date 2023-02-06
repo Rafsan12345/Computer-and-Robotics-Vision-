@@ -1,0 +1,89 @@
+import cv2
+import time
+import numpy as np
+import os
+# wcam , hcam = 648,488
+#cap = cv2.VideoCapture(0)
+# cap.set(3,wcam)
+# cap.set(4,hcam)
+poslist = []
+folderPath = 'image'
+mylist = os.listdir(folderPath)
+newlist = []
+for impath in mylist:
+    image = cv2.imread(f"{folderPath}/{impath}")
+    image = cv2.resize(image, (300, 300),interpolation=cv2.INTER_LINEAR)
+    newlist.append(image)
+
+def mousePoints(event,x,y,flags,params):
+    if event == cv2.EVENT_LBUTTONDOWN:
+        poslist.append((x,y))
+        print(poslist)
+
+
+while True:
+    img = np.zeros((588, 648, 3), dtype=np.uint8)
+    img2 = np.zeros((588, 648, 3), dtype=np.uint8)
+    img3 = np.zeros((588, 648, 3), dtype=np.uint8)
+    img4 = np.zeros((588, 648, 3), dtype=np.uint8)
+    #cv2.line(img, (4, 81), (512, 42), (0, 255, 0), 9)
+    cv2.rectangle(img, (481, 139), (481+100,129+100), (0, 255, 0), cv2.FILLED)
+    #cv2.rectangle(img, (485, 361), (485 + 100, 361 + 100), (0, 255, 0), cv2.FILLED)
+    #cv2.circle(image, center_coordinates, radius, color, thickness)
+    #cv2.circle(img, (312, 244), 5, (0, 0, 255), thickness=2)
+    #cv2.circle(img, (385, 243), 5, (0, 0, 255), thickness=2)
+    ###################
+    #cv2.line(img, (482, 140), (300, 134), (0, 255, 0), 9)
+    #cv2.line(img, (479, 228), (300, 224), (0, 0, 0), 9)
+    cv2.line(img, (479, 185), (299, 185), (0, 0, 255), 15)
+    cv2.line(img, (529, 230), (529, 360), (0, 0, 255), 15)
+    cv2.line(img, (587, 414), (638, 414), (0, 0, 255), 15)
+    font = cv2.FONT_HERSHEY_SIMPLEX
+    cv2.putText(img,'ON', (313, 30), font, 1, (0, 255, 0), 2, cv2.LINE_AA)
+    cv2.putText(img,'OFF', (441, 30), font, 1, (0, 0, 255), 2, cv2.LINE_AA)
+    cv2.putText(img, 'Transformer1', (421, 124), font, 1, (255, 0, 255), 2, cv2.LINE_AA)
+    cv2.putText(img, 'Grid1', (560, 358), font, 1, (255, 0, 255), 2, cv2.LINE_AA)
+    ##
+    cv2.putText(img2, 'Volt: 11 Kv', (30, 30), font, 1, (255, 255, 255), 3, cv2.LINE_AA)
+    cv2.putText(img2, 'Frquency: 50 HZ',(30, 90), font, 1, (255, 255, 255), 3, cv2.LINE_AA)
+    cv2.putText(img2, 'Current: 20A', (30, 150), font, 1, (255, 255, 255), 3, cv2.LINE_AA)
+    cv2.putText(img2, 'Real: 20MW', (30, 210), font, 1, (255, 255, 255), 3, cv2.LINE_AA)
+    cv2.putText(img2, 'Reactive: 5MW', (30, 270), font, 1, (255, 255, 255), 3, cv2.LINE_AA)
+    cv2.putText(img2, 'Apparent: 25MW', (30, 330), font, 1, (255, 255, 255), 3, cv2.LINE_AA)
+    cv2.putText(img2, 'Voltage Regulation: 4 %', (30, 390), font, 1, (255, 255, 255), 3, cv2.LINE_AA)
+
+#####
+    cv2.putText(img3, 'Inlet: 23 Bar', (30, 30), font, 1, (255, 255, 255), 3, cv2.LINE_AA)
+    cv2.putText(img3, 'Outlet: 21 Bar', (30, 90), font, 1, (255, 255, 255), 3, cv2.LINE_AA)
+    cv2.putText(img3, 'Drop: 1 Bar', (30, 150), font, 1, (255, 255, 255), 3, cv2.LINE_AA)
+
+    cv2.putText(img3, 'Boiler : 5 Bar', (30, 210), font, 1, (255, 255, 255), 3, cv2.LINE_AA)
+    cv2.putText(img3, 'Economizer: 2 Bar', (30, 270), font, 1, (255, 255, 255), 3, cv2.LINE_AA)
+    cv2.putText(img3, 'Chimney: 2.5 Bar', (30, 330), font, 1, (255, 255, 255), 3, cv2.LINE_AA)
+
+    cv2.putText(img3, 'Ash 3% ', (30, 390), font, 1, (255, 255, 255), 3, cv2.LINE_AA)
+
+
+######
+    cv2.putText(img4, 'Coal 50 Ton', (30, 30), font, 1, (255, 255, 255), 3, cv2.LINE_AA)
+    cv2.putText(img4, 'Reserve 1000 Kg', (30, 90), font, 1, (255, 255, 255), 3, cv2.LINE_AA)
+    cv2.putText(img4, 'Ash 500 Kg', (30, 150), font, 1, (255, 255, 255), 3, cv2.LINE_AA)
+
+
+    ##
+    cv2.putText(img, 'L1', (351, 221), font, 1, (0, 255, 255), 2, cv2.LINE_AA)
+    cv2.putText(img, 'L2', (545, 268), font, 1, (0, 255, 255), 2, cv2.LINE_AA)
+    cv2.putText(img, 'L3', (602, 450), font, 1, (0, 255, 255), 2, cv2.LINE_AA)
+
+    ##
+    #cv2.circle(img, (529, 184), 50, (0, 255, 255), -1)
+    cv2.circle(img, (529, 411), 50, (0, 255, 0), -1)
+    img[0:300, 0:300] = newlist[0]
+    #img3[50:300, 50:300] = newlist[5]
+
+    cv2.imshow("Flow Chart", img)
+    cv2.imshow("Value Chart", img2)
+    cv2.imshow("Preasure Chart", img3)
+
+    #cv2.setMouseCallback("img", mousePoints)
+    cv2.waitKey(1)
