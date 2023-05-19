@@ -1,0 +1,32 @@
+import cv2
+from pyzbar import pyzbar
+
+# Load the input image
+image = cv2.imread('BQJPG.JPG')
+
+# Convert the image to grayscale
+gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+
+# Use the ZBar library to find and decode barcodes
+barcodes = pyzbar.decode(gray)
+
+# Loop over detected barcodes
+for barcode in barcodes:
+    # Extract the bounding box coordinates and barcode data
+    (x, y, w, h) = barcode.rect
+    barcode_data = barcode.data.decode("utf-8")
+    barcode_type = barcode.type
+
+    # Draw the barcode data and type on the image
+    cv2.rectangle(image, (x, y), (x + w, y + h), (0, 255, 0), 2)
+    text = f"{barcode_data} ({barcode_type})"
+    cv2.putText(image, text, (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
+
+    # Print the barcode data and type
+    print(f"Barcode data: {barcode_data}")
+    print(f"Barcode type: {barcode_type}")
+
+# Display the image with barcode information
+cv2.imshow("Barcode Scanner", image)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
